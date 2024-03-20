@@ -32,5 +32,5 @@ class Event(models.Model):
     date = models.DateField()
 
 class Ticket(models.Model):
-    event_title = models.ForeignKey('Event', on_delete=models.CASCADE)
-    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+    event_title = models.ForeignKey(Event, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

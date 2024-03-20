@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import *
-
+from django.contrib.auth import get_user_model
 def index(request):
     if not request.user.is_authenticated:
         return render(request, 'ticketapp/index.html')
@@ -71,9 +71,9 @@ def events(request):
 def ticket(request, event_id):
     if request.method == "POST":
         event = Event.objects.get(id=event_id)
-        Ticket.objects.create(event_title=event.id, user=request.user)
-        return redirect('events')
+        user = get_user_model()
+        Ticket.objects.create(event_title=event, user=user)
+        return redirect('home')
     else:
-        return render(request, 'ticketapp/events.html',)
-
-
+        event = Event.objects.get(id=event_id)
+        return render(request, 'ticketapp/events.html', {'event': event})
