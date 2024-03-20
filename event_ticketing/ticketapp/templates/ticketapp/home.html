@@ -31,6 +31,7 @@
 </head>
 <body>
     <h1>Welcome, {{ request.user.username }}</h1>
+    <h1>You are assigned as "{{ request.user.role }}"</h1>
     <a href="{% url 'events' %}">Events</a>
     <a href="{% url 'user_logout' %}">Logout</a>
 </body>

@@ -2,9 +2,124 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>EVENTS</title>
+    <title>Events</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin-top: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        h1 {
+            color: #333;
+        }
+        a {
+            padding: 10px 20px;
+            margin: 10px;
+            text-decoration: none;
+            color: #fff;
+            background-color: #007bff;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: -5px;
+            display: inline-block;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .main {
+            background-color: #fff;
+            padding-top: 10px;
+            display: flex;
+        }
+
+        .event {
+            background-color: #eeeeee;
+            margin: 15px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 2px 2px #dadada;
+            height: 420px;
+            width: 290px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .ticket {
+            display: flex;
+            height: 55px;
+        }
+
+        h2 {
+            width: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+
+    </style>
 </head>
 <body>
-
+    <div class="main">
+        {% if not events %}
+        <h1>No Events</h1>
+        {% else %}
+            <div class="event">
+                <h1>Events:</h1>
+                {% for event in events %}
+                        <div class="ticket">
+                            <h2>{{ event.title }}</h2>
+                            {% if request.user.role == "audience" %}
+                                <a id="buy" href="{% url 'buy_ticket' event.id %}">Buy</a>
+                            {% endif %}
+                        </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if request.user.role == "organizer" %}
+        <div>
+        <form method="post">
+            <h1>Add Event</h1>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add Event</button>
+        </form>
+        {% endif %}
+        </div>
+    </div>
+    <a href="{% url 'home' %}">home page</a>
 </body>
 </html>

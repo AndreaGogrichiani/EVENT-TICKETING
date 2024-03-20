@@ -24,3 +24,13 @@ class CustomUser(AbstractUser):
         related_name='custom_user_set',  # Add a custom related_name
         related_query_name='user',
     )
+
+class Event(models.Model):
+    title = models.CharField(max_length=100)
+    cost = models.CharField(max_length=20)
+    location = models.CharField(max_length=100)
+    date = models.DateField()
+
+class Ticket(models.Model):
+    event_title = models.ForeignKey('Event', on_delete=models.CASCADE)
+    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)

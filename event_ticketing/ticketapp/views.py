@@ -47,7 +47,33 @@ def user_login(request):
 
     return render(request, 'ticketapp/login.html', {"form": form})
 
+@login_required
 def user_logout(request):
     logout(request)
     return redirect('user_login')
+
+@login_required
+def events(request):
+    events = Event.objects.all()
+
+    if request.method == "POST":
+        form = EventForm(request.POST)
+        if form.is_valid:
+            form.save()
+            return redirect("events")
+    else:
+        form = EventForm()
+
+    return render(request, 'ticketapp/events.html', {'events': events, "form": form})
+
+
+@login_required
+def ticket(request, event_id):
+    if request.method == "POST":
+        event = Event.objects.get(id=event_id)
+        Ticket.objects.create(event_title=event.id, user=request.user)
+        return redirect('events')
+    else:
+        return render(request, 'ticketapp/events.html',)
+
 
